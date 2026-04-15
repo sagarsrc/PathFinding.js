@@ -177,6 +177,15 @@ $.extend(Controller, {
             operationCount: this.operationCount,
         });
         View.drawPath(this.path);
+
+        // Show score card with run metrics
+        var record = Scorer.captureRun(
+            Panel.getFinderName(),
+            this.path,
+            parseFloat(this.timeSpent),
+            this.operationCount
+        );
+        Scorer.showScoreCard(record);
         // => finished
     },
     onclear: function(event, from, to) {

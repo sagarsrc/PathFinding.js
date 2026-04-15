@@ -141,3 +141,144 @@ footer {
 .spinner {
     width: 2em;
 }
+
+/* ── Score card ─────────────────────────────────────── */
+#score_card {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    left: 35px;
+    width: 240px;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    border-radius: 8px;
+    padding: 14px 16px 12px;
+    font-size: 13px;
+    box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+    z-index: 100;
+}
+
+#score_card h3 {
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #7ef;
+}
+
+.sc-close {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #aaa;
+}
+
+.sc-close:hover { color: #fff; }
+
+.sc-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 3px 0;
+}
+
+.sc-label { color: #aaa; }
+.sc-value { color: #fff; font-weight: bold; }
+
+.sc-actions {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sc-save-btn {
+    width: auto !important;
+    padding: 2px 10px !important;
+    font-size: 12px !important;
+    margin: 0 !important;
+}
+
+.sc-saved-msg {
+    display: none;
+    font-size: 11px;
+    color: #8f8;
+}
+
+/* ── Show comparison button ─────────────────────────── */
+#show_comparison {
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    width: auto !important;
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    margin: 0 !important;
+    cursor: pointer;
+}
+
+/* ── Comparison drawer ──────────────────────────────── */
+#comparison_drawer {
+    display: none;
+    position: fixed;
+    bottom: 70px;
+    right: 20px;
+    width: 640px;
+    max-height: 320px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.82);
+    color: #fff;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 12px;
+    z-index: 200;
+    box-shadow: 3px 3px 12px rgba(0,0,0,0.6);
+}
+
+#comparison_drawer h3 {
+    font-size: 13px;
+    font-weight: bold;
+    color: #7ef;
+    margin-bottom: 8px;
+    display: inline-block;
+}
+
+#clear_runs_btn {
+    width: auto !important;
+    padding: 2px 8px !important;
+    font-size: 11px !important;
+    margin: 0 0 8px 12px !important;
+    vertical-align: middle;
+}
+
+#comparison_drawer table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#comparison_drawer th {
+    text-align: left;
+    color: #7ef;
+    border-bottom: 1px solid #555;
+    padding: 3px 6px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+#comparison_drawer td {
+    padding: 4px 6px;
+    border-bottom: 1px solid #333;
+    vertical-align: middle;
+}
+
+#comparison_drawer tr:last-child td { border-bottom: none; }
+
+.del-run-btn {
+    width: auto !important;
+    padding: 1px 6px !important;
+    font-size: 11px !important;
+    margin: 0 !important;
+    background: rgba(255,80,80,0.6) !important;
+    color: #fff !important;
+}

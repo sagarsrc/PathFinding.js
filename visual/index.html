@@ -23,6 +23,7 @@
     <script type="text/javascript" src="./lib/pathfinding-browser.min.js"></script>
 
     <script type="text/javascript" src="./js/view.js"></script>
+    <script type="text/javascript" src="./js/scorer.js"></script>
     <script type="text/javascript" src="./js/controller.js"></script>
     <script type="text/javascript" src="./js/panel.js"></script>
     <script type="text/javascript" src="./js/main.js"></script>
@@ -226,6 +227,53 @@
     </div>
 
     <div id="stats"></div>
+
+    <!-- Score card: shown after each run -->
+    <div id="score_card">
+      <span class="sc-close">✕</span>
+      <h3>Run Results</h3>
+      <div class="sc-row">
+        <span class="sc-label">Algorithm</span>
+        <span class="sc-value sc-algorithm">—</span>
+      </div>
+      <div class="sc-row">
+        <span class="sc-label">Path length</span>
+        <span class="sc-value sc-path-length">—</span>
+      </div>
+      <div class="sc-row">
+        <span class="sc-label">Nodes explored</span>
+        <span class="sc-value sc-nodes">—</span>
+      </div>
+      <div class="sc-row">
+        <span class="sc-label">Time</span>
+        <span class="sc-value sc-time">—</span>
+      </div>
+      <div class="sc-actions">
+        <button class="sc-save-btn control_button">Save run</button>
+        <span class="sc-saved-msg">Saved!</span>
+      </div>
+    </div>
+
+    <!-- Comparison drawer -->
+    <div id="comparison_drawer">
+      <h3>Saved Runs</h3>
+      <button id="clear_runs_btn" class="control_button">Clear all</button>
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Algorithm</th>
+            <th>Path len</th>
+            <th>Nodes</th>
+            <th>ms</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <button id="show_comparison" class="control_button">Compare runs</button>
 
     <footer>
       Project Hosted on <a href="http://github.com/qiao/PathFinding.js">Github</a>

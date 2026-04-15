@@ -1,22 +1,22 @@
 # Controls Worker
 
-You build the control panel for an interactive pathfinding scenario builder.
+Build the control panel for an interactive pathfinding scenario builder.
 
-## Task
+## What to build
 
-1. Explore the existing visual demo in `visual/` and available algorithms in `src/finders/`
-2. Build or extend controls:
-   - Algorithm dropdown (populated from available finders)
-   - "Find Path" button
-   - "Clear" button (reset grid to empty)
-   - Grid size selector (default 15x15)
-   - Speed slider for animation speed
-3. TDD approach: write failing tests first, then implement
-4. Controls must emit events or call APIs that other components can hook into
+- Algorithm dropdown (populated from available finders)
+- "Find Path" button
+- "Clear" button (reset grid to empty)
+- Grid size selector (default 15x15)
+- Speed slider for animation speed
+- "Save Scenario" button — triggers JSON download of current grid state
+- "Load Scenario" button — opens file picker to load grid JSON
+- Preset map dropdown — select from built-in maps, loads preset into grid
 
-## Rules
-- Work in `visual/` directory
-- Write tests in `test/`
-- Use `should.js` assertion style
-- Run full suite after: `npx mocha --require should test/**/*.js`
-- Do NOT break existing functionality
+## How
+
+1. Explore `visual/` and `src/finders/` to understand what exists
+2. Check what previous iterations may have already built
+3. TDD: write failing tests first, then implement
+4. Run full suite after: `npx mocha --require should test/**/*.js`
+5. Use `should.js` assertion style

@@ -1,0 +1,6 @@
+{"iter":1,"worker":"canvas-worker","cost":0.3574893,"ts":"2026-04-15T17:01:30Z"}
+{"iter":1,"worker":"controls-worker","cost":0.5932111500000001,"ts":"2026-04-15T17:01:30Z"}
+{"iter":1,"worker":"scorer-worker","cost":0.68085825,"ts":"2026-04-15T17:01:30Z"}
+{"iter":1,"worker":"persistence-worker","cost":0.30770265,"ts":"2026-04-15T17:01:30Z"}
+{"iter":1,"worker":"integration-worker","cost":1.7453975000000002,"ts":"2026-04-15T17:01:30Z"}
+{"iter":1,"worker":"reviewer","cost":0.406711,"ts":"2026-04-15T17:01:30Z"}

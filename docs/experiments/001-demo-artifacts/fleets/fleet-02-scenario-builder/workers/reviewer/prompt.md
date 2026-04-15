@@ -31,7 +31,29 @@ All tests must pass. Any failures = iterate.
 
 ## Verdict
 
-- **lgtm** — all checklist items pass, no test regressions
-- **iterate** — list what's broken or missing, be specific about which worker should fix what
+Write your review to the iteration verdict file.
+
+To find the current iteration number: list the `iterations/` directory in your working directory. Find the highest-numbered subdirectory that does NOT already contain a `review.md` — that's your iteration. If none exist or all have reviews, create the next one. Default to 1 if the directory is empty.
+
+Write to:
+
+```
+iterations/<N>/review.md
+```
+
+(Relative to your working directory — do NOT use absolute paths.)
+
+The file MUST contain a line starting with `verdict:` followed by one of:
+- `verdict: lgtm` — all checklist items pass, no test regressions
+- `verdict: iterate` — list what's broken or missing, be specific about which worker should fix what
+
+Example review.md:
+```
+verdict: iterate
+
+## Issues
+- canvas-worker: wall toggle not working, clicks do nothing
+- scorer-worker: metrics panel missing time display
+```
 
 Start the demo server to test: `npx http-server visual -p 8080 -c-1`

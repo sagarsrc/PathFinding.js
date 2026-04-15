@@ -1,0 +1,637 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PathFinding.js — Scenario Builder</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./lib/themes/jquery.ui.all.css">
+  <style>
+    /* ── Scenario builder layout ───────────────────────────────── */
+    body { margin: 0; padding: 0; font-family: Arial, sans-serif; background: #1a1a2e; color: #eee; }
+
+    #draw_area { display: block; }
+
+    #scenario_panel {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 240px;
+      background: #16213e;
+      border: 1px solid #0f3460;
+      border-radius: 6px;
+      padding: 12px;
+      z-index: 100;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    }
+
+    #scenario_panel h2 {
+      margin: 0 0 12px 0;
+      font-size: 14px;
+      color: #e94560;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .ctrl-group { margin-bottom: 12px; }
+    .ctrl-group label {
+      display: block;
+      font-size: 11px;
+      color: #aaa;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .ctrl-group select,
+    .ctrl-group input[type=number] {
+      width: 100%;
+      box-sizing: border-box;
+      background: #0f3460;
+      color: #eee;
+      border: 1px solid #1a4a7a;
+      border-radius: 4px;
+      padding: 5px 8px;
+      font-size: 12px;
+    }
+
+    .ctrl-group input[type=range] {
+      width: 100%;
+      box-sizing: border-box;
+      accent-color: #e94560;
+    }
+
+    .speed-value { font-size: 11px; color: #aaa; text-align: right; }
+
+    .grid-size-row { display: flex; gap: 6px; align-items: center; }
+    .grid-size-row input { flex: 1; }
+    .grid-size-row span { color: #aaa; font-size: 12px; }
+
+    .btn-row { display: flex; gap: 6px; }
+    .btn-row .btn { flex: 1; }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 7px 0;
+      background: #0f3460;
+      color: #eee;
+      border: 1px solid #1a4a7a;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.15s;
+    }
+    .btn:hover { background: #1a4a7a; }
+    .btn.primary { background: #e94560; border-color: #e94560; font-weight: bold; }
+    .btn.primary:hover { background: #c73652; }
+    .btn.danger { background: #553; border-color: #776; }
+    .btn.danger:hover { background: #776; }
+
+    #status_bar {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(22,33,62,0.9);
+      border: 1px solid #0f3460;
+      border-radius: 4px;
+      padding: 6px 16px;
+      font-size: 12px;
+      color: #aaa;
+      pointer-events: none;
+    }
+
+    /* ── Score card ────────────────────────────────────────────── */
+    #score_card {
+      display: none;
+      position: fixed;
+      bottom: 40px;
+      left: 10px;
+      width: 220px;
+      background: #16213e;
+      border: 1px solid #0f3460;
+      border-radius: 6px;
+      padding: 12px;
+      z-index: 200;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+      font-size: 12px;
+    }
+    #score_card h3 {
+      margin: 0 0 8px 0;
+      font-size: 13px;
+      color: #e94560;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .sc-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+    .sc-label { color: #aaa; }
+    .sc-val { color: #eee; font-weight: bold; }
+    .sc-saved-msg { display: none; color: #4caf50; font-size: 11px; margin-top: 4px; }
+    #score_card .sc-close {
+      position: absolute; top: 6px; right: 8px;
+      background: none; border: none; color: #aaa; cursor: pointer; font-size: 14px;
+    }
+
+    /* ── Comparison drawer ─────────────────────────────────────── */
+    #comparison_drawer {
+      display: none;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      max-width: calc(100vw - 280px);
+      background: #16213e;
+      border: 1px solid #0f3460;
+      border-radius: 6px;
+      padding: 12px;
+      z-index: 200;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+      overflow-x: auto;
+    }
+    #comparison_drawer h3 {
+      margin: 0 0 8px 0;
+      font-size: 13px;
+      color: #e94560;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    #comparison_drawer table {
+      border-collapse: collapse;
+      font-size: 12px;
+      width: 100%;
+    }
+    #comparison_drawer th {
+      color: #aaa;
+      text-align: left;
+      padding: 4px 8px;
+      border-bottom: 1px solid #0f3460;
+    }
+    #comparison_drawer td { padding: 4px 8px; color: #eee; }
+    #comparison_drawer tr:hover td { background: rgba(15,52,96,0.4); }
+    .del-run-btn {
+      background: none; border: none; color: #e94560; cursor: pointer; font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="draw_area"></div>
+
+<div id="scenario_panel">
+  <h2>Scenario Builder</h2>
+
+  <!-- Algorithm selector -->
+  <div class="ctrl-group">
+    <label for="algo_select">Algorithm</label>
+    <select id="algo_select"></select>
+  </div>
+
+  <!-- Preset map selector -->
+  <div class="ctrl-group">
+    <label for="preset_select">Preset Map</label>
+    <select id="preset_select">
+      <option value="">— choose preset —</option>
+    </select>
+  </div>
+
+  <!-- Grid size -->
+  <div class="ctrl-group">
+    <label>Grid Size</label>
+    <div class="grid-size-row">
+      <input type="number" id="grid_width"  min="5" max="50" value="15">
+      <span>×</span>
+      <input type="number" id="grid_height" min="5" max="50" value="15">
+    </div>
+  </div>
+
+  <!-- Speed slider -->
+  <div class="ctrl-group">
+    <label>Animation Speed — <span id="speed_label">200 ops/s</span></label>
+    <input type="range" id="speed_slider" min="10" max="1000" value="200" step="10">
+  </div>
+
+  <!-- Primary action buttons -->
+  <div class="ctrl-group">
+    <button class="btn primary" id="btn_find_path">Find Path</button>
+  </div>
+
+  <div class="ctrl-group btn-row">
+    <button class="btn danger" id="btn_clear">Clear</button>
+    <button class="btn" id="btn_apply_size">Resize Grid</button>
+  </div>
+
+  <!-- Save / Load -->
+  <div class="ctrl-group btn-row">
+    <button class="btn" id="btn_save">Save Scenario</button>
+    <button class="btn" id="btn_load">Load Scenario</button>
+  </div>
+
+  <!-- Comparison -->
+  <div class="ctrl-group">
+    <button class="btn" id="show_comparison">Compare Runs</button>
+  </div>
+
+  <!-- Hidden file input for load -->
+  <input type="file" id="file_input" accept=".json" style="display:none">
+</div>
+
+<!-- Score card -->
+<div id="score_card" style="display:none;position:fixed;bottom:50px;left:50%;transform:translateX(-50%);
+  background:#16213e;border:1px solid #0f3460;border-radius:6px;padding:14px 18px;
+  z-index:200;box-shadow:0 4px 16px rgba(0,0,0,0.6);min-width:280px;font-size:13px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+    <strong style="color:#e94560;">Results</strong>
+    <button class="sc-close" style="background:none;border:none;color:#aaa;cursor:pointer;font-size:16px;">✕</button>
+  </div>
+  <table style="width:100%;border-collapse:collapse;">
+    <tr><td style="color:#aaa;padding:3px 0;">Algorithm</td><td class="sc-algorithm" style="text-align:right;font-weight:bold;"></td></tr>
+    <tr><td style="color:#aaa;padding:3px 0;">Path length</td><td class="sc-path-length" style="text-align:right;"></td></tr>
+    <tr><td style="color:#aaa;padding:3px 0;">Nodes explored</td><td class="sc-nodes" style="text-align:right;"></td></tr>
+    <tr><td style="color:#aaa;padding:3px 0;">Time</td><td class="sc-time" style="text-align:right;"></td></tr>
+  </table>
+  <div style="margin-top:10px;display:flex;align-items:center;gap:8px;">
+    <button class="btn sc-save-btn" style="width:auto;padding:5px 14px;">Save Run</button>
+    <span class="sc-saved-msg" style="display:none;color:#4caf50;font-size:11px;"></span>
+  </div>
+</div>
+
+<!-- Comparison drawer -->
+<div id="comparison_drawer" style="display:none;position:fixed;bottom:0;left:0;right:0;
+  background:#16213e;border-top:2px solid #0f3460;z-index:300;max-height:260px;overflow-y:auto;padding:12px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+    <strong style="color:#e94560;font-size:13px;">Saved Runs</strong>
+    <button id="clear_runs_btn" class="btn danger" style="width:auto;padding:4px 12px;font-size:11px;">Clear All</button>
+  </div>
+  <table style="width:100%;border-collapse:collapse;font-size:12px;">
+    <thead>
+      <tr style="color:#aaa;text-align:left;">
+        <th style="padding:4px 8px;">Time</th>
+        <th style="padding:4px 8px;">Algorithm</th>
+        <th style="padding:4px 8px;">Path Len</th>
+        <th style="padding:4px 8px;">Nodes</th>
+        <th style="padding:4px 8px;">Duration</th>
+        <th style="padding:4px 8px;"></th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div id="status_bar">Draw walls · Drag start (green) and end (red) nodes</div>
+
+<!-- Dependencies -->
+<script src="./lib/raphael-min.js"></script>
+<script src="./lib/es5-shim.min.js"></script>
+<script src="./lib/jquery-1.7.2.min.js"></script>
+<script src="./lib/state-machine.min.js"></script>
+<script src="./lib/async.min.js"></script>
+
+<script src="./lib/ui/jquery.ui.core.min.js"></script>
+<script src="./lib/ui/jquery.ui.widget.min.js"></script>
+<script src="./lib/ui/jquery.ui.mouse.min.js"></script>
+<script src="./lib/ui/jquery.ui.draggable.min.js"></script>
+
+<script src="./lib/pathfinding-browser.min.js"></script>
+
+<script src="./js/view.js"></script>
+<script src="./js/scenario-controls.js"></script>
+<script src="./js/scorer.js"></script>
+<script>
+/**
+ * Scenario Builder — wires ScenarioControls config to View + PF.
+ * Minimal controller; leans on existing View for rendering.
+ */
+(function() {
+    var SC     = ScenarioControls;
+    var grid   = null;
+    var startX = 1, startY = 1, endX = 13, endY = 13;
+    var opsPerSecond = SC.SPEED_CONFIG.default;
+    var isSearching  = false;
+    var operations   = [];
+    var animTimer    = null;
+
+    // ── Populate algorithm dropdown ────────────────────────────────────────
+    var $algoSelect = $('#algo_select');
+    SC.ALGORITHMS.forEach(function(algo) {
+        $('<option>').val(algo.id).text(algo.label).appendTo($algoSelect);
+    });
+
+    // ── Populate preset dropdown ───────────────────────────────────────────
+    var $presetSelect = $('#preset_select');
+    SC.PRESETS.forEach(function(preset) {
+        $('<option>').val(preset.id).text(preset.label).appendTo($presetSelect);
+    });
+
+    // ── Speed slider ───────────────────────────────────────────────────────
+    $('#speed_slider').on('input change', function() {
+        opsPerSecond = parseInt(this.value);
+        $('#speed_label').text(opsPerSecond + ' ops/s');
+    });
+
+    // ── Grid init ─────────────────────────────────────────────────────────
+    function initGrid(w, h, sx, sy, ex, ey) {
+        w  = w  || SC.GRID_SIZE_DEFAULT.width;
+        h  = h  || SC.GRID_SIZE_DEFAULT.height;
+        sx = (sx !== undefined) ? sx : 1;
+        sy = (sy !== undefined) ? sy : Math.floor(h / 2);
+        ex = (ex !== undefined) ? ex : w - 2;
+        ey = (ey !== undefined) ? ey : Math.floor(h / 2);
+
+        if (!SC.validateGridSize(w, h)) {
+            setStatus('Invalid grid size: must be 5–50.');
+            return;
+        }
+
+        startX = sx; startY = sy; endX = ex; endY = ey;
+        grid = new PF.Grid(w, h);
+        abortSearch();
+
+        View.init({ numCols: w, numRows: h });
+        View.generateGrid(function() {
+            View.setStartPos(startX, startY);
+            View.setEndPos(endX, endY);
+            bindDrawEvents();
+        });
+    }
+
+    // ── Draw events (wall drawing / dragging start+end) ────────────────────
+    function bindDrawEvents() {
+        var drawing = null; // 'wall' | 'erase' | 'dragStart' | 'dragEnd'
+
+        $('#draw_area').off('mousedown').on('mousedown', function(e) {
+            if (isSearching) return;
+            var coord = View.toGridCoordinate(e.pageX, e.pageY);
+            var gx = coord[0], gy = coord[1];
+
+            if (gx === startX && gy === startY) { drawing = 'dragStart'; return; }
+            if (gx === endX   && gy === endY)   { drawing = 'dragEnd';   return; }
+
+            if (grid.isWalkableAt(gx, gy)) {
+                drawing = 'wall';
+                setWalkable(gx, gy, false);
+            } else {
+                drawing = 'erase';
+                setWalkable(gx, gy, true);
+            }
+        });
+
+        $(window).off('mousemove.sb').on('mousemove.sb', function(e) {
+            if (!drawing) return;
+            var coord = View.toGridCoordinate(e.pageX, e.pageY);
+            var gx = coord[0], gy = coord[1];
+            if (gx < 0 || gy < 0 || gx >= grid.width || gy >= grid.height) return;
+
+            if (drawing === 'dragStart' && grid.isWalkableAt(gx, gy) &&
+                !(gx === endX && gy === endY)) {
+                startX = gx; startY = gy;
+                View.setStartPos(gx, gy);
+            } else if (drawing === 'dragEnd' && grid.isWalkableAt(gx, gy) &&
+                       !(gx === startX && gy === startY)) {
+                endX = gx; endY = gy;
+                View.setEndPos(gx, gy);
+            } else if (drawing === 'wall' && !(gx === startX && gy === startY) &&
+                       !(gx === endX && gy === endY)) {
+                setWalkable(gx, gy, false);
+            } else if (drawing === 'erase') {
+                setWalkable(gx, gy, true);
+            }
+        });
+
+        $(window).off('mouseup.sb').on('mouseup.sb', function() {
+            drawing = null;
+        });
+    }
+
+    function setWalkable(gx, gy, walkable) {
+        grid.setWalkableAt(gx, gy, walkable);
+        View.setAttributeAt(gx, gy, 'walkable', walkable);
+    }
+
+    // ── Find Path ─────────────────────────────────────────────────────────
+    hookNodeTracking();
+
+    function hookNodeTracking() {
+        PF.Node.prototype = {
+            get opened() { return this._opened; },
+            set opened(v) {
+                this._opened = v;
+                operations.push({ x: this.x, y: this.y, attr: 'opened', value: v });
+            },
+            get closed() { return this._closed; },
+            set closed(v) {
+                this._closed = v;
+                operations.push({ x: this.x, y: this.y, attr: 'closed', value: v });
+            },
+            get tested() { return this._tested; },
+            set tested(v) {
+                this._tested = v;
+                operations.push({ x: this.x, y: this.y, attr: 'tested', value: v });
+            },
+        };
+    }
+
+    function findPath() {
+        if (!grid) return;
+        abortSearch();
+        View.clearFootprints && View.clearFootprints();
+        View.clearPath && View.clearPath();
+        operations = [];
+
+        var algoId  = $('#algo_select').val();
+        var finder  = buildFinder(algoId);
+        if (!finder) { setStatus('Unknown algorithm: ' + algoId); return; }
+
+        var cloned  = grid.clone();
+        var t0      = performance.now ? performance.now() : Date.now();
+        var path    = finder.findPath(startX, startY, endX, endY, cloned);
+        var timeMs  = (performance.now ? performance.now() : Date.now()) - t0;
+        var opsCopy = operations.slice();
+        operations  = [];
+
+        // Count unique nodes explored (opened or closed)
+        var exploredSet = {};
+        opsCopy.forEach(function(op) {
+            if (op.attr === 'opened' || op.attr === 'closed') {
+                exploredSet[op.x + ',' + op.y] = true;
+            }
+        });
+        var nodesExplored = Object.keys(exploredSet).length;
+
+        isSearching = true;
+        setStatus('Searching…');
+
+        var opIdx = 0;
+        animTimer = setInterval(function() {
+            if (opIdx >= opsCopy.length) {
+                clearInterval(animTimer);
+                isSearching = false;
+                View.drawPath(path);
+                if (path.length) {
+                    setStatus('Path found · ' + path.length + ' nodes');
+                } else {
+                    setStatus('No path found');
+                }
+                // Show score card
+                var algoLabel = (function() {
+                    var sel = $('#algo_select option:selected');
+                    return sel.length ? sel.text() : algoId;
+                }());
+                var record = Scorer.captureRun(algoLabel, path, timeMs, nodesExplored);
+                Scorer.showScoreCard(record);
+                return;
+            }
+            var op = opsCopy[opIdx++];
+            if (View.supportedOperations.indexOf(op.attr) !== -1) {
+                View.setAttributeAt(op.x, op.y, op.attr, op.value);
+            }
+        }, 1000 / opsPerSecond);
+    }
+
+    function abortSearch() {
+        if (animTimer) { clearInterval(animTimer); animTimer = null; }
+        isSearching = false;
+    }
+
+    function buildFinder(id) {
+        switch (id) {
+            case 'AStarFinder':          return new PF.AStarFinder();
+            case 'BiAStarFinder':        return new PF.BiAStarFinder();
+            case 'BestFirstFinder':      return new PF.BestFirstFinder();
+            case 'BiBestFirstFinder':    return new PF.BiBestFirstFinder();
+            case 'BreadthFirstFinder':   return new PF.BreadthFirstFinder();
+            case 'BiBreadthFirstFinder': return new PF.BiBreadthFirstFinder();
+            case 'DijkstraFinder':       return new PF.DijkstraFinder();
+            case 'BiDijkstraFinder':     return new PF.BiDijkstraFinder();
+            case 'IDAStarFinder':        return new PF.IDAStarFinder({ timeLimit: 10 });
+            case 'JumpPointFinder':      return new PF.JumpPointFinder({
+                diagonalMovement: PF.DiagonalMovement.IfAtMostOneObstacle
+            });
+            default: return null;
+        }
+    }
+
+    // ── Clear ─────────────────────────────────────────────────────────────
+    function clearGrid() {
+        if (!grid) return;
+        abortSearch();
+        var w = grid.width, h = grid.height;
+        initGrid(w, h, startX, startY, endX, endY);
+        setStatus('Grid cleared');
+    }
+
+    // ── Resize ────────────────────────────────────────────────────────────
+    function resizeGrid() {
+        var w = parseInt($('#grid_width').val());
+        var h = parseInt($('#grid_height').val());
+        if (!SC.validateGridSize(w, h)) {
+            setStatus('Invalid size: must be 5–50.');
+            return;
+        }
+        initGrid(w, h);
+    }
+
+    // ── Preset load ───────────────────────────────────────────────────────
+    $('#preset_select').on('change', function() {
+        var id = this.value;
+        if (!id) return;
+        var preset = SC.PRESETS.filter(function(p) { return p.id === id; })[0];
+        if (!preset) return;
+        loadScenario(preset.scenario);
+        this.value = '';
+        setStatus('Loaded preset: ' + preset.label);
+    });
+
+    function loadScenario(data) {
+        try {
+            var restored = SC.deserializeGrid(data);
+            var w = restored.grid.width, h = restored.grid.height;
+            abortSearch();
+            grid = restored.grid;
+            startX = restored.startX; startY = restored.startY;
+            endX   = restored.endX;   endY   = restored.endY;
+
+            $('#grid_width').val(w);
+            $('#grid_height').val(h);
+
+            View.init({ numCols: w, numRows: h });
+            View.generateGrid(function() {
+                // Restore walls
+                for (var y = 0; y < h; y++) {
+                    for (var x = 0; x < w; x++) {
+                        if (!grid.isWalkableAt(x, y)) {
+                            View.setAttributeAt(x, y, 'walkable', false);
+                        }
+                    }
+                }
+                View.setStartPos(startX, startY);
+                View.setEndPos(endX, endY);
+                bindDrawEvents();
+            });
+        } catch (err) {
+            setStatus('Load error: ' + err.message);
+        }
+    }
+
+    // ── Save Scenario ─────────────────────────────────────────────────────
+    function saveScenario() {
+        if (!grid) return;
+        var data = SC.serializeGrid(grid, startX, startY, endX, endY);
+        var json = JSON.stringify(data, null, 2);
+        var blob = new Blob([json], { type: 'application/json' });
+        var url  = URL.createObjectURL(blob);
+        var a    = document.createElement('a');
+        a.href     = url;
+        a.download = 'scenario.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        setStatus('Scenario saved');
+    }
+
+    // ── Load Scenario (file picker) ───────────────────────────────────────
+    $('#btn_load').on('click', function() {
+        $('#file_input').click();
+    });
+
+    $('#file_input').on('change', function() {
+        var file = this.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                var data = JSON.parse(e.target.result);
+                loadScenario(data);
+                setStatus('Loaded: ' + file.name);
+            } catch (err) {
+                setStatus('Invalid file: ' + err.message);
+            }
+        };
+        reader.readAsText(file);
+        this.value = '';
+    });
+
+    // ── Button wiring ──────────────────────────────────────────────────────
+    $('#btn_find_path').on('click', findPath);
+    $('#btn_clear').on('click', clearGrid);
+    $('#btn_save').on('click', saveScenario);
+    $('#btn_apply_size').on('click', resizeGrid);
+
+    // ── Status helper ──────────────────────────────────────────────────────
+    function setStatus(msg) {
+        $('#status_bar').text(msg);
+    }
+
+    // ── Boot ───────────────────────────────────────────────────────────────
+    $(function() {
+        Scorer.init();
+        initGrid(
+            SC.GRID_SIZE_DEFAULT.width,
+            SC.GRID_SIZE_DEFAULT.height
+        );
+    });
+
+}());
+</script>
+</body>
+</html>

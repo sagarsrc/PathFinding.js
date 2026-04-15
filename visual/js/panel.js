@@ -180,5 +180,23 @@ var Panel = {
         }
 
         return finder;
+    },
+    /**
+     * Return a display name for the currently selected finder.
+     */
+    getFinderName: function() {
+        var selected_header = $(
+            '#algorithm_panel .ui-accordion-header[aria-selected=true]'
+        ).attr('id');
+        var names = {
+            'astar_header':           'A*',
+            'ida_header':             'IDA*',
+            'breadthfirst_header':    'BreadthFirst',
+            'bestfirst_header':       'BestFirst',
+            'dijkstra_header':        'Dijkstra',
+            'jump_point_header':      'JumpPoint',
+            'orth_jump_point_header': 'OrthJumpPoint'
+        };
+        return names[selected_header] || selected_header || 'Unknown';
     }
 };
