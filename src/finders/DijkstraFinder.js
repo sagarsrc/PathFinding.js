@@ -36,7 +36,7 @@ DijkstraFinder.prototype.findPath = function(startX, startY, endX, endY, grid) {
 
     // --- Phase 1: BFS from goal to compute h*(n) = exact distance to goal ---
     // Uses a plain array queue; does NOT set node.opened/node.closed.
-    var dist = new Array(width * height);
+    var dist = new Int32Array(width * height); // typed array: faster alloc, auto-zeroed
     for (var ii = 0; ii < dist.length; ii++) dist[ii] = -1;
 
     var endNode = grid.getNodeAt(endX, endY);
