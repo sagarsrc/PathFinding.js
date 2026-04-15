@@ -1,0 +1,84 @@
+{
+  "fleet_name": "fleet-01-test-blitz",
+  "fleet_id": "fleet-01-test-blitz-001",
+  "status": "pending",
+  "config": {
+    "max_concurrent": 5,
+    "model": "sonnet",
+    "fallback_model": "haiku",
+    "launch_delay_seconds": 3,
+    "max_budget_fleet": 5.0
+  },
+  "workers": [
+    {
+      "id": "coverage-auditor",
+      "type": "read-only",
+      "task": "Audit test coverage per algorithm, identify gaps, output gap-report.md",
+      "max_turns": 30,
+      "max_budget_usd": 0.50
+    },
+    {
+      "id": "visual-auditor",
+      "type": "read-only",
+      "task": "Audit visual/ app capabilities and gaps, output visual-gaps.md",
+      "max_turns": 30,
+      "max_budget_usd": 0.50
+    },
+    {
+      "id": "orchestrator",
+      "type": "orchestrator",
+      "task": "Read auditor reports, distribute work across 4 test writers + scenario builder",
+      "max_turns": 20,
+      "max_budget_usd": 0.50,
+      "depends_on": ["coverage-auditor", "visual-auditor"]
+    },
+    {
+      "id": "test-writer-1",
+      "type": "code-run",
+      "task": "Read input/assignments.md, write failing tests first, then make them pass",
+      "max_turns": 50,
+      "max_budget_usd": 0.75,
+      "depends_on": ["orchestrator"]
+    },
+    {
+      "id": "test-writer-2",
+      "type": "code-run",
+      "task": "Read input/assignments.md, write failing tests first, then make them pass",
+      "max_turns": 50,
+      "max_budget_usd": 0.75,
+      "depends_on": ["orchestrator"]
+    },
+    {
+      "id": "test-writer-3",
+      "type": "code-run",
+      "task": "Read input/assignments.md, write failing tests first, then make them pass",
+      "max_turns": 50,
+      "max_budget_usd": 0.75,
+      "depends_on": ["orchestrator"]
+    },
+    {
+      "id": "test-writer-4",
+      "type": "code-run",
+      "task": "Read input/assignments.md, write failing tests first, then make them pass",
+      "max_turns": 50,
+      "max_budget_usd": 0.75,
+      "depends_on": ["orchestrator"]
+    },
+    {
+      "id": "scenario-builder",
+      "type": "code-run",
+      "task": "Read input/assignments.md, build visual scenario features with TDD",
+      "max_turns": 50,
+      "max_budget_usd": 0.75,
+      "depends_on": ["orchestrator"]
+    },
+    {
+      "id": "validator",
+      "type": "code-run",
+      "task": "Run full test suite, report before/after coverage, verify scenario builder",
+      "max_turns": 20,
+      "max_budget_usd": 0.50,
+      "depends_on": ["test-writer-1", "test-writer-2", "test-writer-3", "test-writer-4", "scenario-builder"]
+    }
+  ]
+}

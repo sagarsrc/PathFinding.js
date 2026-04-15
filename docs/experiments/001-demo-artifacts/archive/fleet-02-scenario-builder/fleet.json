@@ -1,0 +1,56 @@
+{
+  "fleet_name": "fleet-02-scenario-builder",
+  "fleet_id": "fleet-02-scenario-builder-001",
+  "type": "iterative",
+  "status": "pending",
+  "config": {
+    "max_concurrent": 5,
+    "model": "sonnet",
+    "fallback_model": "haiku",
+    "max_iterations": 3,
+    "cost_cap_usd": 10.0
+  },
+  "workers": [
+    {
+      "id": "canvas-worker",
+      "type": "code-run",
+      "task": "Build grid rendering + click-to-toggle-wall + start/end placement with TDD",
+      "max_budget_per_iter": 1.0
+    },
+    {
+      "id": "controls-worker",
+      "type": "code-run",
+      "task": "Build UI controls (algo dropdown, find path, clear, grid size, speed slider) with TDD",
+      "max_budget_per_iter": 1.0
+    },
+    {
+      "id": "scorer-worker",
+      "type": "code-run",
+      "task": "Build scorer + comparison drawer + save/load/clear runs with TDD",
+      "max_budget_per_iter": 1.0
+    },
+    {
+      "id": "persistence-worker",
+      "type": "code-run",
+      "task": "Build save/load scenario JSON + preset 15x15 map library with TDD",
+      "max_budget_per_iter": 1.0
+    },
+    {
+      "id": "integration-worker",
+      "type": "code-run",
+      "task": "Wire all components together, hook pathfinding, animate path with TDD",
+      "max_budget_per_iter": 1.0
+    },
+    {
+      "id": "reviewer",
+      "type": "reviewer",
+      "task": "Verify all features work, existing tests pass, write verdict",
+      "depends_on": ["canvas-worker", "controls-worker", "scorer-worker", "persistence-worker", "integration-worker"]
+    }
+  ],
+  "stop_when": {
+    "reviewer_lgtm_count": 1,
+    "max_iterations": 3,
+    "cost_cap_usd": 10.0
+  }
+}

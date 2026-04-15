@@ -1,0 +1,36 @@
+{
+  "fleet_name": "fleet-03-algorithm-race",
+  "fleet_id": "fleet-03-algorithm-race-001",
+  "status": "pending",
+  "config": {
+    "max_concurrent": 3,
+    "model": "sonnet",
+    "fallback_model": "haiku",
+    "launch_delay_seconds": 3,
+    "max_budget_fleet": 3.0
+  },
+  "workers": [
+    {
+      "id": "racer-astar",
+      "type": "code-run",
+      "task": "Run A* on fixed 15x15 map, capture metrics, output results.md",
+      "max_turns": 30,
+      "max_budget_usd": 0.50
+    },
+    {
+      "id": "racer-dijkstra",
+      "type": "code-run",
+      "task": "Run Dijkstra on fixed 15x15 map, capture metrics, output results.md",
+      "max_turns": 30,
+      "max_budget_usd": 0.50
+    },
+    {
+      "id": "leaderboard",
+      "type": "code-run",
+      "task": "Read both racer results, produce leaderboard.md with comparison",
+      "max_turns": 20,
+      "max_budget_usd": 0.50,
+      "depends_on": ["racer-astar", "racer-dijkstra"]
+    }
+  ]
+}
