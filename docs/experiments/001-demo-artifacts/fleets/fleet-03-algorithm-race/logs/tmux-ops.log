@@ -1,0 +1,16 @@
+[2026-04-15T17:54:06Z] OK   new-session: tmux new-session -d -s fleet-03-algorithm-race -n monitor -x 220 -y 50
+[2026-04-15T17:54:06Z] OK   send-keys:monitor: tmux send-keys -t fleet-03-algorithm-race:monitor bash '/home/sagar/.claude/skills/dag-fleet/scripts/status.sh' '/home/sagar/PathFinding.js-fork/docs/experiments/001-demo-artifacts/fleets/fleet-03-algorithm-race' --watch C-m
+[2026-04-15T17:54:07Z] PRE  new-window racer-astar cmd=[asciinema rec '/home/sagar/PathFinding.js-fork/docs/experiments/001-demo-artifacts/fleets/fleet-03-algorithm-race/workers/racer-astar/racer-astar.cast' --overwrite -c '/home/sagar/PathFinding.js-fork/docs/experiments/001-demo-artifacts/fleets/fleet-03-algorithm-race/workers/racer-astar/.run.sh']
+[2026-04-15T17:54:07Z] OK   new-window racer-astar
+[2026-04-15T17:54:07Z] POST new-window racer-astar windows=[monitor
+racer-astar]
+[2026-04-15T17:54:11Z] PRE  new-window racer-dijkstra cmd=[asciinema rec '/home/sagar/PathFinding.js-fork/docs/experiments/001-demo-artifacts/fleets/fleet-03-algorithm-race/workers/racer-dijkstra/racer-dijkstra.cast' --overwrite -c '/home/sagar/PathFinding.js-fork/docs/experiments/001-demo-artifacts/fleets/fleet-03-algorithm-race/workers/racer-dijkstra/.run.sh']
+[2026-04-15T17:54:11Z] OK   new-window racer-dijkstra
+[2026-04-15T17:54:11Z] POST new-window racer-dijkstra windows=[monitor
+racer-astar
+racer-dijkstra]
+[2026-04-15T17:58:07Z] PRE  new-window leaderboard cmd=[asciinema rec '/home/sagar/PathFinding.js-fork/docs/experiments/001-demo-artifacts/fleets/fleet-03-algorithm-race/workers/leaderboard/leaderboard.cast' --overwrite -c '/home/sagar/PathFinding.js-fork/docs/experiments/001-demo-artifacts/fleets/fleet-03-algorithm-race/workers/leaderboard/.run.sh']
+[2026-04-15T17:58:07Z] OK   new-window leaderboard
+[2026-04-15T17:58:07Z] POST new-window leaderboard windows=[monitor
+racer-dijkstra
+leaderboard]

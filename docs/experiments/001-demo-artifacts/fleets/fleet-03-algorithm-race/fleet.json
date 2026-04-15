@@ -12,22 +12,36 @@
       "id": "racer-astar",
       "model": "sonnet",
       "type": "code-run",
-      "max_budget_usd": 10.00,
-      "depends_on": []
+      "max_budget_usd": 10,
+      "depends_on": [],
+      "status": "running",
+      "session_name": "fleet-fleet-03-algorithm-race-racer-astar",
+      "started_at": "2026-04-15T17:54:07Z"
     },
     {
       "id": "racer-dijkstra",
       "model": "sonnet",
       "type": "code-run",
-      "max_budget_usd": 10.00,
-      "depends_on": []
+      "max_budget_usd": 10,
+      "depends_on": [],
+      "status": "running",
+      "session_name": "fleet-fleet-03-algorithm-race-racer-dijkstra",
+      "started_at": "2026-04-15T17:54:11Z"
     },
     {
       "id": "leaderboard",
       "model": "opus",
       "type": "code-run",
-      "max_budget_usd": 10.00,
-      "depends_on": ["racer-astar", "racer-dijkstra"]
+      "max_budget_usd": 10,
+      "depends_on": [
+        "racer-astar",
+        "racer-dijkstra"
+      ],
+      "status": "running",
+      "session_name": "fleet-fleet-03-algorithm-race-leaderboard",
+      "started_at": "2026-04-15T17:58:07Z"
     }
-  ]
+  ],
+  "status": "running",
+  "launched_at": "2026-04-15T17:58:07Z"
 }

@@ -54,6 +54,11 @@ var View = {
     init: function(opts) {
         this.numCols      = opts.numCols;
         this.numRows      = opts.numRows;
+        if (this.paper) {
+            this.paper.remove();
+        }
+        this.startNode    = null;
+        this.endNode      = null;
         this.paper        = Raphael('draw_area');
         this.$stats       = $('#stats');
     },

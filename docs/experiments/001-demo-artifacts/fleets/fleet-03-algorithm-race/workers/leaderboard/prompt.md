@@ -1,33 +1,18 @@
 # Leaderboard
 
-You compile benchmark results from A* and Dijkstra into a leaderboard.
+Compile benchmark results into a leaderboard.
 
 ## Task
 
 1. Read both racer results:
-   - `/home/sagar/PathFinding.js-fork/docs/experiments/001-demo-artifacts/fleets/fleet-03-algorithm-race/workers/racer-astar/output/results.md`
-   - `/home/sagar/PathFinding.js-fork/docs/experiments/001-demo-artifacts/fleets/fleet-03-algorithm-race/workers/racer-dijkstra/output/results.md`
-2. Compare metrics: nodes explored, path length, execution time
-3. Declare a winner per metric and overall
-4. If Demo 2's scenario builder exists, optionally create a comparison scenario that loads both results
+   - `workers/racer-astar/output/results.md`
+   - `workers/racer-dijkstra/output/results.md`
+   (paths relative to fleet root)
+2. Build a leaderboard for EACH map
+3. Declare winner per map and overall
 
 ## Output
 
-Save to `/home/sagar/PathFinding.js-fork/docs/experiments/001-demo-artifacts/fleets/fleet-03-algorithm-race/workers/leaderboard/output/leaderboard.md` — use absolute paths.
+Save to `workers/leaderboard/output/leaderboard.md` (relative to fleet root).
 
-Format as a markdown table:
-
-```
-# Algorithm Race Leaderboard
-
-| Metric | A* | Dijkstra | Winner |
-|--------|-----|----------|--------|
-| Path Length | N | N | ... |
-| Nodes Explored | N | N | ... |
-| Avg Time (ms) | N.NN | N.NN | ... |
-
-## Overall Winner: [algorithm]
-
-## Analysis
-[Brief explanation of why the winner won — heuristic advantage, search space reduction, etc.]
-```
+Format as markdown tables — one per map, metrics side by side, winner column.
