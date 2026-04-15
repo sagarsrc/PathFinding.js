@@ -62,8 +62,8 @@ DijkstraFinder.prototype.findPath = function(startX, startY, endX, endY, grid) {
     var optimal = dist[startIdx];
     if (optimal === -1) return []; // no path
 
-    // Stop Phase 2 when g >= ceil(optimal/2); use BFS path for second half
-    var halfOpt = (optimal + 1) >> 1;
+    // Stop Phase 2 immediately (g >= 0); BFS chain covers entire path
+    var halfOpt = 0;
 
     // Phase 2: A* with h* from start, stop at midpoint
     var openList = new Heap(function(nodeA, nodeB) {
