@@ -1,0 +1,8 @@
+{
+  "current_iteration": 6,
+  "trailing_discards": 1,
+  "is_search": false,
+  "best_metric": "0.0083",
+  "total_cost": "2.04",
+  "status": "killed"
+}

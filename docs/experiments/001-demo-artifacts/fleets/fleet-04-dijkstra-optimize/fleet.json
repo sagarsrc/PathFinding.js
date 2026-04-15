@@ -1,0 +1,30 @@
+{
+  "fleet_name": "fleet-04-dijkstra-optimize",
+  "type": "autoresearch",
+  "config": {
+    "model": "sonnet",
+    "fallback_model": "sonnet",
+    "provider": "claude",
+    "budget_per_iter": 5,
+    "max_turns": 0
+  },
+  "problem": {
+    "workdir": "/home/sagar/PathFinding.js-fork",
+    "eval_command": "node bench-dijkstra.js",
+    "metric_regex": "^([0-9.]+)$",
+    "metric_direction": "minimize",
+    "results_file": "results.tsv",
+    "program_md": "program.md"
+  },
+  "stop_when": {
+    "max_iterations": 20,
+    "cost_cap_usd": 50
+  },
+  "search": {
+    "enabled": true,
+    "plateau_threshold": 3
+  },
+  "status": "killed",
+  "launched_at": "2026-04-15T20:06:38Z",
+  "killed_at": "2026-04-15T20:23:54Z"
+}
