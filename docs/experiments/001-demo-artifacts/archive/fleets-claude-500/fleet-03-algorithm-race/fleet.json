@@ -1,0 +1,47 @@
+{
+  "fleet_name": "fleet-03-algorithm-race",
+  "type": "dag",
+  "config": {
+    "max_concurrent": 2,
+    "model": "gpt-5.3-codex",
+    "provider": "codex",
+    "reasoning_effort": "medium"
+  },
+  "workers": [
+    {
+      "id": "racer-astar",
+      "type": "code-run",
+      "description": "Run A* on fixed 15x15 map, capture metrics",
+      "max_budget_usd": 10,
+      "depends_on": [],
+      "status": "running",
+      "session_name": "fleet-fleet-03-algorithm-race-racer-astar",
+      "started_at": "2026-04-15T14:23:27Z"
+    },
+    {
+      "id": "racer-dijkstra",
+      "type": "code-run",
+      "description": "Run Dijkstra on same fixed 15x15 map, capture metrics",
+      "max_budget_usd": 10,
+      "depends_on": [],
+      "status": "running",
+      "session_name": "fleet-fleet-03-algorithm-race-racer-dijkstra",
+      "started_at": "2026-04-15T14:23:31Z"
+    },
+    {
+      "id": "leaderboard",
+      "type": "write",
+      "description": "Read both results, produce leaderboard and comparison",
+      "max_budget_usd": 10,
+      "depends_on": [
+        "racer-astar",
+        "racer-dijkstra"
+      ],
+      "status": "running",
+      "session_name": "fleet-fleet-03-algorithm-race-leaderboard",
+      "started_at": "2026-04-15T14:24:46Z"
+    }
+  ],
+  "status": "running",
+  "launched_at": "2026-04-15T14:24:46Z"
+}

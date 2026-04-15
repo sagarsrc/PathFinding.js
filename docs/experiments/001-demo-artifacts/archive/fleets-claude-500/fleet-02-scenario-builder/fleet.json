@@ -1,0 +1,70 @@
+{
+  "fleet_name": "fleet-02-scenario-builder",
+  "type": "iterative",
+  "config": {
+    "max_concurrent": 5,
+    "model": "gpt-5.3-codex",
+    "provider": "codex",
+    "reasoning_effort": "medium"
+  },
+  "stop_when": {
+    "max_iterations": 5,
+    "reviewer_lgtm_count": 1
+  },
+  "workers": [
+    {
+      "id": "canvas-worker",
+      "type": "code-run",
+      "description": "Grid rendering, click-to-toggle-wall, start/end placement",
+      "max_budget_per_iter": 10
+    },
+    {
+      "id": "controls-worker",
+      "type": "code-run",
+      "description": "Algorithm dropdown, find path button, clear, grid size, speed slider",
+      "max_budget_per_iter": 10
+    },
+    {
+      "id": "scorer-worker",
+      "type": "code-run",
+      "description": "Metrics capture, score card, comparison drawer, save/load/clear runs",
+      "max_budget_per_iter": 10
+    },
+    {
+      "id": "persistence-worker",
+      "type": "code-run",
+      "description": "Save/load scenario JSON, preset map library (5 built-in maps, 15x15)",
+      "max_budget_per_iter": 10
+    },
+    {
+      "id": "integration-worker",
+      "type": "code-run",
+      "description": "Wire all components together, hook find-path to pathfinding, animate",
+      "max_budget_per_iter": 10,
+      "depends_on": [
+        "canvas-worker",
+        "controls-worker",
+        "scorer-worker",
+        "persistence-worker"
+      ]
+    },
+    {
+      "id": "reviewer",
+      "type": "reviewer",
+      "description": "Verify all features work, run regression tests, verdict lgtm or iterate",
+      "max_budget_per_iter": 10,
+      "provider": "claude",
+      "model": "opus",
+      "depends_on": [
+        "canvas-worker",
+        "controls-worker",
+        "scorer-worker",
+        "persistence-worker",
+        "integration-worker"
+      ]
+    }
+  ],
+  "status": "killed",
+  "launched_at": "2026-04-15T14:23:25Z",
+  "killed_at": "2026-04-15T15:57:22Z"
+}

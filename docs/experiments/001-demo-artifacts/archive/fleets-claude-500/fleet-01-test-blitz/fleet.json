@@ -1,0 +1,125 @@
+{
+  "fleet_name": "fleet-01-test-blitz",
+  "type": "dag",
+  "config": {
+    "max_concurrent": 4,
+    "model": "gpt-5.3-codex",
+    "provider": "codex",
+    "reasoning_effort": "medium"
+  },
+  "workers": [
+    {
+      "id": "coverage-auditor",
+      "type": "code-run",
+      "description": "Run test suite, analyze coverage gaps per algorithm",
+      "max_budget_usd": 10,
+      "depends_on": [],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-coverage-auditor",
+      "started_at": "2026-04-15T14:22:44Z"
+    },
+    {
+      "id": "visual-auditor",
+      "type": "code-run",
+      "description": "Analyze visual/ app capabilities and test gaps",
+      "max_budget_usd": 10,
+      "depends_on": [],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-visual-auditor",
+      "started_at": "2026-04-15T14:22:48Z"
+    },
+    {
+      "id": "orchestrator",
+      "type": "write",
+      "description": "Read both audit reports, distribute work across writers",
+      "max_budget_usd": 10,
+      "depends_on": [
+        "coverage-auditor",
+        "visual-auditor"
+      ],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-orchestrator",
+      "started_at": "2026-04-15T14:25:23Z"
+    },
+    {
+      "id": "test-writer-1",
+      "type": "code-run",
+      "description": "Write tests for assigned coverage gaps",
+      "max_budget_usd": 10,
+      "depends_on": [
+        "orchestrator"
+      ],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-test-writer-1",
+      "started_at": "2026-04-15T14:27:38Z"
+    },
+    {
+      "id": "test-writer-2",
+      "type": "code-run",
+      "description": "Write tests for assigned coverage gaps",
+      "max_budget_usd": 10,
+      "depends_on": [
+        "orchestrator"
+      ],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-test-writer-2",
+      "started_at": "2026-04-15T14:27:42Z"
+    },
+    {
+      "id": "test-writer-3",
+      "type": "code-run",
+      "description": "Write tests for assigned coverage gaps",
+      "max_budget_usd": 10,
+      "depends_on": [
+        "orchestrator"
+      ],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-test-writer-3",
+      "started_at": "2026-04-15T14:27:46Z"
+    },
+    {
+      "id": "test-writer-4",
+      "type": "code-run",
+      "description": "Write tests for assigned coverage gaps",
+      "max_budget_usd": 10,
+      "depends_on": [
+        "orchestrator"
+      ],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-test-writer-4",
+      "started_at": "2026-04-15T14:27:50Z"
+    },
+    {
+      "id": "scenario-builder",
+      "type": "code-run",
+      "description": "Build visual test scenarios and features from assignments",
+      "max_budget_usd": 10,
+      "depends_on": [
+        "orchestrator"
+      ],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-scenario-builder",
+      "started_at": "2026-04-15T14:39:53Z"
+    },
+    {
+      "id": "validator",
+      "type": "code-run",
+      "description": "Run full suite, report before/after, verify all work",
+      "max_budget_usd": 10,
+      "provider": "claude",
+      "model": "opus",
+      "depends_on": [
+        "test-writer-1",
+        "test-writer-2",
+        "test-writer-3",
+        "test-writer-4",
+        "scenario-builder"
+      ],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-validator",
+      "started_at": "2026-04-15T14:45:37Z"
+    }
+  ],
+  "status": "running",
+  "launched_at": "2026-04-15T14:45:37Z"
+}

@@ -1,0 +1,123 @@
+{
+  "fleet_name": "fleet-01-test-blitz",
+  "type": "dag",
+  "config": {
+    "max_concurrent": 4,
+    "model": "sonnet",
+    "fallback_model": "sonnet",
+    "provider": "claude"
+  },
+  "workers": [
+    {
+      "id": "coverage-auditor",
+      "model": "sonnet",
+      "type": "code-run",
+      "max_budget_usd": 10,
+      "depends_on": [],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-coverage-auditor",
+      "started_at": "2026-04-15T16:09:39Z"
+    },
+    {
+      "id": "visual-auditor",
+      "model": "sonnet",
+      "type": "code-run",
+      "max_budget_usd": 10,
+      "depends_on": [],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-visual-auditor",
+      "started_at": "2026-04-15T16:09:43Z"
+    },
+    {
+      "id": "orchestrator",
+      "model": "opus",
+      "type": "write",
+      "max_budget_usd": 10,
+      "depends_on": [
+        "coverage-auditor",
+        "visual-auditor"
+      ],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-orchestrator",
+      "started_at": "2026-04-15T16:12:08Z"
+    },
+    {
+      "id": "test-writer-1",
+      "model": "sonnet",
+      "type": "code-run",
+      "max_budget_usd": 10,
+      "depends_on": [
+        "orchestrator"
+      ],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-test-writer-1",
+      "started_at": "2026-04-15T16:14:02Z"
+    },
+    {
+      "id": "test-writer-2",
+      "model": "sonnet",
+      "type": "code-run",
+      "max_budget_usd": 10,
+      "depends_on": [
+        "orchestrator"
+      ],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-test-writer-2",
+      "started_at": "2026-04-15T16:14:07Z"
+    },
+    {
+      "id": "test-writer-3",
+      "model": "sonnet",
+      "type": "code-run",
+      "max_budget_usd": 10,
+      "depends_on": [
+        "orchestrator"
+      ],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-test-writer-3",
+      "started_at": "2026-04-15T16:14:11Z"
+    },
+    {
+      "id": "test-writer-4",
+      "model": "sonnet",
+      "type": "code-run",
+      "max_budget_usd": 10,
+      "depends_on": [
+        "orchestrator"
+      ],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-test-writer-4",
+      "started_at": "2026-04-15T16:14:15Z"
+    },
+    {
+      "id": "scenario-builder",
+      "model": "opus",
+      "type": "code-run",
+      "max_budget_usd": 10,
+      "depends_on": [
+        "orchestrator"
+      ],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-scenario-builder",
+      "started_at": "2026-04-15T16:15:43Z"
+    },
+    {
+      "id": "validator",
+      "model": "opus",
+      "type": "code-run",
+      "max_budget_usd": 10,
+      "depends_on": [
+        "test-writer-1",
+        "test-writer-2",
+        "test-writer-3",
+        "test-writer-4",
+        "scenario-builder"
+      ],
+      "status": "running",
+      "session_name": "fleet-fleet-01-test-blitz-validator",
+      "started_at": "2026-04-15T16:21:34Z"
+    }
+  ],
+  "status": "running",
+  "launched_at": "2026-04-15T16:21:34Z"
+}

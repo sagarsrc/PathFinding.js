@@ -243,6 +243,7 @@ var View = {
     },
     drawPath: function(path) {
         if (!path.length) {
+            this.$stats.show().html('no path found');
             return;
         }
         var svgPath = this.buildSvgPath(path);

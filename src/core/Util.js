@@ -135,14 +135,20 @@ exports.expandPath = expandPath;
  */
 function smoothenPath(grid, path) {
     var len = path.length,
-        x0 = path[0][0],        // path start x
-        y0 = path[0][1],        // path start y
-        x1 = path[len - 1][0],  // path end x
-        y1 = path[len - 1][1],  // path end y
+        x0, y0, x1, y1,
         sx, sy,                 // current start coordinate
         ex, ey,                 // current end coordinate
         newPath,
-        i, j, coord, line, testCoord, blocked;
+        i, j, coord, line, testCoord, blocked, lastValidCoord;
+
+    if (len < 2) {
+        return path.slice();
+    }
+
+    x0 = path[0][0];        // path start x
+    y0 = path[0][1];        // path start y
+    x1 = path[len - 1][0];  // path end x
+    y1 = path[len - 1][1];  // path end y
 
     sx = x0;
     sy = y0;
